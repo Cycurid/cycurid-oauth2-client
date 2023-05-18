@@ -1,3 +1,3 @@
-import Barcode from './components/App'
+import Barcode from './components/Barcode'
 
 export { Barcode }
