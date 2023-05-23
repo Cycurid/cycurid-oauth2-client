@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react'
 import { listenForServerStatus } from '../services/listenForServerStatus'
 import { getBarcodeData } from '../services/getBarcodeData'
 import QrCode from './QRCode'
-// import ClipLoader from 'react-spinners/ClipLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
+import styled from 'styled-components'
+
+import ErrorScreen from './ErrorScreen'
+import SuccessScreen from './SuccessScreen'
 
 interface BarcodeProps {
   config: {
@@ -14,6 +18,14 @@ interface BarcodeProps {
     entityName?: string
     size?: number
   }
+}
+interface BarcodeContainerProps {
+  size?: number
+}
+
+interface StatusResponse {
+  statusCode: number
+  code?: string // Add code property here if it exists in your response
 }
 
 const Barcode: React.FC<BarcodeProps> = ({ config }) => {
@@ -27,13 +39,12 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
   const [merchantLogo, setMerchantLogo] = useState<string | undefined>()
   const [token, setToken] = useState<string | undefined>()
   const [sessionID, setSessionID] = useState<string | undefined>()
-  console.log(barcodeData, statusCode, merchantName, merchantLogo)
+  const [authCode, setAuthCode] = useState<string | undefined>()
+  console.log(barcodeData, statusCode, merchantName, merchantLogo, size)
 
   useEffect(() => {
     const fetchBarcodeData = async () => {
       try {
-        console.log('STUFF', clientID, redirectURL, scope, action, entityName)
-
         const response = await getBarcodeData(clientID, redirectURL, scope, action, entityName)
         setBarcodeData(response?.barcodeData)
         setStatusCode(response?.statusCode)
@@ -52,11 +63,10 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
   useEffect(() => {
     const fetchStatus = async () => {
       if (listening) {
-        console.log('sessionID', sessionID)
-
-        const statusResponse = await listenForServerStatus(clientID, sessionID ?? '', token ?? '')
+        const statusResponse: StatusResponse = await listenForServerStatus(clientID, sessionID ?? '', token ?? '')
         console.log('STATUS', statusResponse.statusCode)
         setStatusCode(statusResponse.statusCode)
+        setAuthCode(statusResponse.code)
       }
     }
 
@@ -67,25 +77,52 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
     }
   }, [listening, sessionID, clientID, token]) // Include listening, sessionID, clientID, and token in the dependency array
 
-  //   const viewHandler = () => {
-  //     if (statusCode === 0 && barcodeData) {
-  //       return <div> {barcodeData ? <QrCode barcodeData={barcodeData} size={size} /> : 'loading'}</div>
-  //     } else if (statusCode === 1) {
-  //       return <ClipLoader color='black' />
-  //     }
-  //     return <h1>Error</h1>
-  //   }
+  const barcodeHandler = () => {
+    if (statusCode === 0 && barcodeData) {
+      //QR CODE GENERATED
+      return <QrCode barcodeData={barcodeData} size={size} />
+    } else if (statusCode === 1) {
+      //BARCODE SCANNED WAITING FOR RESPONSE
+      return <ClipLoader color='black' />
+    } else if (statusCode === 2 && authCode) {
+      //ACCESS_GRANTED
+      return <SuccessScreen authCode={authCode} redirectURL={redirectURL} />
+    } else if (statusCode === 3) {
+      //ACCESS_DENIED
+      return <ErrorScreen statusCode={statusCode} />
+    } else if (statusCode === 4) {
+      //NOT IMPLEMENTED YET
+      return <h1>Status 4</h1>
+    } else if (statusCode === 5) {
+      // TIMEOUT
+      return <ErrorScreen statusCode={statusCode} />
+    } else if (statusCode === 6) {
+      //SERVER ISSUE
+      return <ErrorScreen statusCode={statusCode} />
+    }
+    //DEFAULT LOADER
+    return <ClipLoader color='black' />
+  }
   return (
     <div>
-      <h1>Barcode</h1>
+      {/* <h1>Barcode</h1>
       <h1>{listening}</h1>
       <h2>{statusCode}</h2>
       <h2>{merchantName}</h2>
       <h2>{merchantLogo}</h2>
-      <h2>{barcodeData}</h2>
-      <div> {barcodeData ? <QrCode barcodeData={barcodeData} size={size} /> : 'loading'}</div>
+      <h2>{barcodeData}</h2> */}
+
+      <BarcodeContainer size={size}>{barcodeHandler()}</BarcodeContainer>
     </div>
   )
 }
+
+const BarcodeContainer = styled.div<BarcodeContainerProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${(props) => props.size}px;
+  width: ${(props) => props.size}px;
+`
 
 export default Barcode

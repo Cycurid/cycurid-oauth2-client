@@ -75,7 +75,7 @@ export const getBarcodeData = async (
 
       return {
         barcodeData: barcodeDataJSON,
-        statusCode: response.data.status,
+        statusCode: parseInt(response.data.status, 10),
         merchantName: response.data.merchant_display_name,
         merchantLogo: response.data.merchant_display_logo,
         token: response.data.token,

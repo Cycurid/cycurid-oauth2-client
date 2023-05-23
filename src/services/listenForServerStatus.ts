@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 interface ResponseData {
   status: number
+  code?: string
 }
 
 interface ErrorResponseData {
@@ -29,7 +30,10 @@ export const listenForServerStatus = async (
     console.log('StatusResponse==>', response.data)
 
     if (response.status === 200) {
-      return { statusCode: response.data.status }
+      return { statusCode: parseInt(response.data.status.toString(), 10), code: response.data.code } as {
+        statusCode: number
+        code: string
+      }
     }
   } catch (error: any) {
     console.log('listenForDataError', error)
