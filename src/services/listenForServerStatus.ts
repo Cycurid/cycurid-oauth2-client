@@ -27,7 +27,6 @@ export const listenForServerStatus = async (
         },
       },
     )
-    console.log('StatusResponse==>', response.data)
 
     if (response.status === 200) {
       return { statusCode: parseInt(response.data.status.toString(), 10), code: response.data.code } as {
@@ -36,8 +35,6 @@ export const listenForServerStatus = async (
       }
     }
   } catch (error: any) {
-    console.log('listenForDataError', error)
-
     if (error.response?.status === 422) {
       const errorResponse: ErrorResponseData = {
         statusCode: 3,

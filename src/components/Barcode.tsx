@@ -29,18 +29,15 @@ interface StatusResponse {
 }
 
 const Barcode: React.FC<BarcodeProps> = ({ config }) => {
-  console.log('CONFIG', config)
-
   const { clientID = '', redirectURL = '', scope = [], action = '', entityName = undefined, size = 200 } = config
   const [listening, setListening] = useState<boolean>(false)
   const [barcodeData, setBarcodeData] = useState<string | undefined>()
   const [statusCode, setStatusCode] = useState<number | undefined>()
-  const [merchantName, setMerchantName] = useState<string | undefined>()
-  const [merchantLogo, setMerchantLogo] = useState<string | undefined>()
+  // const [merchantName, setMerchantName] = useState<string | undefined>()
+  // const [merchantLogo, setMerchantLogo] = useState<string | undefined>()
   const [token, setToken] = useState<string | undefined>()
   const [sessionID, setSessionID] = useState<string | undefined>()
   const [authCode, setAuthCode] = useState<string | undefined>()
-  console.log(barcodeData, statusCode, merchantName, merchantLogo, size)
 
   useEffect(() => {
     const fetchBarcodeData = async () => {
@@ -48,8 +45,8 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
         const response = await getBarcodeData(clientID, redirectURL, scope, action, entityName)
         setBarcodeData(response?.barcodeData)
         setStatusCode(response?.statusCode)
-        setMerchantName(response?.merchantName)
-        setMerchantLogo(response?.merchantLogo)
+        // setMerchantName(response?.merchantName)
+        // setMerchantLogo(response?.merchantLogo)
         setToken(response?.token)
         setSessionID(response?.sessionID)
         setListening(response?.listening || false)
@@ -64,7 +61,6 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
     const fetchStatus = async () => {
       if (listening) {
         const statusResponse: StatusResponse = await listenForServerStatus(clientID, sessionID ?? '', token ?? '')
-        console.log('STATUS', statusResponse.statusCode)
         setStatusCode(statusResponse.statusCode)
         setAuthCode(statusResponse.code)
       }
@@ -105,13 +101,6 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
   }
   return (
     <div>
-      {/* <h1>Barcode</h1>
-      <h1>{listening}</h1>
-      <h2>{statusCode}</h2>
-      <h2>{merchantName}</h2>
-      <h2>{merchantLogo}</h2>
-      <h2>{barcodeData}</h2> */}
-
       <BarcodeContainer size={size}>{barcodeHandler()}</BarcodeContainer>
     </div>
   )

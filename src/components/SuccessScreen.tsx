@@ -8,8 +8,6 @@ interface SuccessScreenProps {
 }
 
 const SuccessScreen: React.FC<SuccessScreenProps> = ({ authCode, redirectURL }) => {
-  console.log('AUTHCODE===>', authCode)
-  console.log('redirect===>', redirectURL)
   useEffect(() => {
     window.location.href = `${redirectURL}?authToken=${authCode}`
   }, [authCode, redirectURL])

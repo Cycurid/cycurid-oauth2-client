@@ -22,7 +22,6 @@ export const getBarcodeData = async (
 ): Promise<BarcodeDataResponse> => {
   let requestParamsBody: any = {}
   const stringScope = scope.join(' ')
-  console.log('stringScope', stringScope)
 
   if (entityName) {
     requestParamsBody = {
@@ -45,8 +44,6 @@ export const getBarcodeData = async (
     const response: AxiosResponse<any> = await axios.post('https://api.cycurid.com/auth/authorization/', {
       oauth_params: requestParamsBody,
     })
-
-    console.log('BarcodeDataResponse', response.data)
 
     if (response.data.status === 404 || response.data.status === 422) {
       const errorResponse: ErrorResponseData = {
@@ -84,7 +81,6 @@ export const getBarcodeData = async (
       }
     }
   } catch (error: any) {
-    console.log('getBarcodeDataError', error)
     const errorResponse: ErrorResponseData = {
       statusCode: 6,
     }
