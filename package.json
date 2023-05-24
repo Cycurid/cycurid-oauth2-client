@@ -30,9 +30,9 @@
   "keywords": [
     "react",
     "typescript",
-    "awesome-project"
+    "auth2"
   ],
-  "author": "Igor Gaponov (gapon2401)",
+  "author": "Jordan Goulet",
   "license": "MIT",
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
