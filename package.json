@@ -7,7 +7,7 @@
   "types": "./dist/esm/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gapon2401/my-react-typescript-package.git"
+    "url": "git+https://github.com/Cycurid/cycurid-oauth2-client"
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
