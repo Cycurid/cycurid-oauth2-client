@@ -82,7 +82,7 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
       return <ClipLoader color='black' />
     } else if (statusCode === 2 && authCode) {
       //ACCESS_GRANTED
-      return <SuccessScreen authCode={authCode} redirectURL={redirectURL} />
+      return <SuccessScreen code={authCode} redirectURL={redirectURL} />
     } else if (statusCode === 3) {
       //ACCESS_DENIED
       return <ErrorScreen statusCode={statusCode} />

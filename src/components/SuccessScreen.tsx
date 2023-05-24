@@ -3,14 +3,14 @@ import SuccessLogo from '../assets/successLogo'
 import styled from 'styled-components'
 
 interface SuccessScreenProps {
-  authCode: string
+  code: string
   redirectURL: string
 }
 
-const SuccessScreen: React.FC<SuccessScreenProps> = ({ authCode, redirectURL }) => {
+const SuccessScreen: React.FC<SuccessScreenProps> = ({ code, redirectURL }) => {
   useEffect(() => {
-    window.location.href = `${redirectURL}?authToken=${authCode}`
-  }, [authCode, redirectURL])
+    window.location.href = `${redirectURL}?code=${code}`
+  }, [code, redirectURL])
 
   return (
     <SuccessContainer>
