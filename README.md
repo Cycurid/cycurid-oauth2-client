@@ -26,11 +26,15 @@ import { Barcode } from 'cycurid-oauth2-client'
 
 This component will generate a barcode which then can be scanned using the Imme app. After a user successfully scans and approves the OAuth request a code is sent to the redirect URL in the params that can be used at a later stage to get an authToken. The cycurid-oauth2-server package provides functions for retrieving the authToken and client data requested in the scope.
 
+### Example
 ```javascript
+
 import { Barcode } from 'cycurid-oauth2-client';
 
-const config = {
 
+const MyComponent=()=>{
+
+const config = {
   clientID: '<YOUR_CLIENT_ID>',
   redirectURL: '<YOUR_REDIRECT_URL>',
   scopes: ['<YOUR_SCOPES_ARRAY>'],
@@ -39,6 +43,11 @@ const config = {
   size:'<SIZE OF QR CODE>'
 };
 
+
+ return(<Barcode config={config} />)
+ 
+  }
+```
 
 ### config
 
