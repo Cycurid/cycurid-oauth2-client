@@ -55,6 +55,8 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
       }
     }
     fetchBarcodeData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
