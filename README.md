@@ -27,6 +27,7 @@ import { Barcode } from 'cycurid-oauth2-client'
 This component will generate a barcode which then can be scanned using the Imme app. After a user successfully scans and approves the OAuth request a code is sent to the redirect URL in the params that can be used at a later stage to get an authToken. The cycurid-oauth2-server package provides functions for retrieving the authToken and client data requested in the scope.
 
 ### Example
+
 ```javascript
 
 import { Barcode } from 'cycurid-oauth2-client';
@@ -41,25 +42,57 @@ const config = {
   action: '<YOUR_ACTION>',
   entity_name: '<YOUR_ENTITY_NAME>',
   size:'<SIZE OF QR CODE>'
+  overwriteRules: {
+      age_min: '<MIN AGE>',
+      age_max: '<MAX AGE>',
+      country: '<ALLOWED_COUNTRY_ISO_ARRAY>'
+      }
 };
 
 
  return(<Barcode config={config} />)
- 
+
   }
+```
+
+### Example 2
+
+```javascript
+import { Barcode } from 'cycurid-oauth2-client'
+
+const MyComponent = () => {
+  const config = {
+    clientID: 'J8mCZcjkBiwIhs1U6jjbLvRR',
+    redirectURL: 'https://my_redirect_url.com/login',
+    scope: ['reference_uuid', 'first_name'],
+    overwriteRules: {
+      age_min: 15,
+      age_max: 100,
+      country: ['CA', 'US'],
+    },
+    action: 'login',
+    entityName: 'test merchant',
+    size: 250,
+  }
+
+  return <Barcode config={config} />
+}
 ```
 
 ### config
 
 This is your configuration object for the client. The config is passed into each of the methods with optional overrides.
 
-- **clientID** - The ID provided to you from [CycurID Portal Website](https://portal.cycurid.com/) see [Account Creation](#account-creation) for more details.
-- **redirectURL** - This is the URL that the request is initially used to initiate the OAuth process. This URL needs to match the provided URL associated with the client account. The widget response will be sent to this address.
-- **scopes** - An array of what user information you want to be returned.
-- **action** - This specifies the objective that you want the user to accomplish currently, we support 'login' and 'register'.
-- **entity_name** - OPTIONAL_KEY, this will change the name displayed on the widget.
-- **size** - OPTIONAL_KEY, defaults to 200, this detemines the size widget.
-
+- **clientID** - (STRING) The ID provided to you from [CycurID Portal Website](https://portal.cycurid.com/) see [Account Creation](#account-creation) for more details.
+- **redirectURL** - (STRING) This is the URL that the request is initially used to initiate the OAuth process. This URL needs to match the provided URL associated with the client account. The widget response will be sent to this address.
+- **scopes** - (ARRAY OF STRINGS) An array of what user information you want to be returned.
+- **action** - (STRING) This specifies the objective that you want the user to accomplish currently, we support 'login' and 'register'.
+- **entity_name** - (STRING) OPTIONAL_KEY, this will change the name displayed on the widget.
+- **size** - OPTIONAL_KEY (NUMBER), defaults to 200, this determines the size widget.
+- **overwriteRules** - OPTIONAL_KEY (OBJECT), Allows for overwrite of individual rules (age_min, age_max, country)
+  - **age_min** - OPTIONAL_KEY (NUMBER), Change minimum age requirement for user
+  - **age_max** - OPTIONAL_KEY (NUMBER), Change maximum age requirement for user
+  - **country** - OPTIONAL_KEY (ARRAY OF ISO2 COUNTRY CODES STRINGS), Change Allowed Countries for user
 
 ## Account Creation
 
@@ -96,4 +129,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+```
+
 ```
