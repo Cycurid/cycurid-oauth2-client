@@ -17,6 +17,11 @@ interface BarcodeProps {
     action: string
     entityName?: string
     size?: number
+    overwriteRules?: {
+      age_min: number
+      age_max: number
+      country: string[]
+    }
   }
 }
 interface BarcodeContainerProps {
@@ -29,7 +34,15 @@ interface StatusResponse {
 }
 
 const Barcode: React.FC<BarcodeProps> = ({ config }) => {
-  const { clientID = '', redirectURL = '', scope = [], action = '', entityName = undefined, size = 200 } = config
+  const {
+    clientID = '',
+    redirectURL = '',
+    scope = [],
+    action = '',
+    entityName = undefined,
+    size = 200,
+    overwriteRules = {},
+  } = config
   const [listening, setListening] = useState<boolean>(false)
   const [barcodeData, setBarcodeData] = useState<string | undefined>()
   const [statusCode, setStatusCode] = useState<number | undefined>()
@@ -42,7 +55,7 @@ const Barcode: React.FC<BarcodeProps> = ({ config }) => {
   useEffect(() => {
     const fetchBarcodeData = async () => {
       try {
-        const response = await getBarcodeData(clientID, redirectURL, scope, action, entityName)
+        const response = await getBarcodeData(clientID, redirectURL, scope, action, entityName, overwriteRules)
         setBarcodeData(response?.barcodeData)
         setStatusCode(response?.statusCode)
         // setMerchantName(response?.merchantName)

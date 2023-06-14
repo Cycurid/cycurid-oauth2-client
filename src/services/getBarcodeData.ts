@@ -19,6 +19,11 @@ export const getBarcodeData = async (
   scope: string[],
   action: string,
   entityName?: string,
+  overwriteRules?: {
+    age_min?: number
+    age_max?: number
+    country?: string[]
+  },
 ): Promise<BarcodeDataResponse> => {
   let requestParamsBody: any = {}
   const stringScope = scope.join(' ')
@@ -30,6 +35,7 @@ export const getBarcodeData = async (
       scope: stringScope,
       action: action,
       entity_name: entityName,
+      ...(overwriteRules && { overwrite_rules: overwriteRules }),
     }
   } else {
     requestParamsBody = {
@@ -37,6 +43,7 @@ export const getBarcodeData = async (
       redirect_url: redirectURL,
       scope: stringScope,
       action: action,
+      ...(overwriteRules && { overwrite_rules: overwriteRules }),
     }
   }
 
